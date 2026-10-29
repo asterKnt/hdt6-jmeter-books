@@ -36,6 +36,16 @@
   .nota { background: var(--tint); border-left: 3px solid var(--accent); padding: 10px 14px; margin: 16px 0; }
   ol li { margin: 4px 0; }
   nav { font-size: 0.95rem; margin: 16px 0 0; }
+  pre { position: relative; padding-top: 42px; }
+  th code { background: none; color: inherit; padding: 0; }
+  .copiar {
+    position: absolute; top: 8px; right: 8px; font: 600 0.75rem/1 "IBM Plex Sans", system-ui, sans-serif;
+    padding: 6px 10px; border: 1px solid var(--accent); border-radius: 4px;
+    background: var(--paper); color: var(--accentd); cursor: pointer;
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  .copiar:hover, .copiar:focus-visible { background: var(--accent); color: var(--paper); }
+  .copiar.ok { background: var(--accent); color: var(--paper); }
 </style>
 </head>
 <body>
@@ -46,6 +56,7 @@
 <nav>
   <a href="#java">1. Java</a> &nbsp;|&nbsp;
   <a href="#jmeter">2. JMeter</a> &nbsp;|&nbsp;
+  <a href="#carpetas">Carpetas</a> &nbsp;|&nbsp;
   <a href="#manager">3. Plugins Manager</a> &nbsp;|&nbsp;
   <a href="#plugins">4. Plugins</a> &nbsp;|&nbsp;
   <a href="#prueba">5. Comprobar</a>
@@ -63,14 +74,14 @@
 <h2 id="java">1. Java</h2>
 <p>JMeter corre sobre Java. Para saber si ya está instalado y qué versión es:</p>
 <pre><code>java -version</code></pre>
-<p>Si el comando no existe, en macOS lo instala Homebrew junto con JMeter en el paso 2. En Windows y Linux se instala un JDK, por ejemplo <a href="https://adoptium.net/">Eclipse Temurin</a> 21, y se abre una terminal nueva antes de seguir.</p>
+<p>Si el comando no existe, en macOS lo instala Homebrew junto con JMeter en el paso 2. En Windows y Linux se instala un JDK, por ejemplo <a href="https://adoptium.net/">Eclipse Temurin</a> 21. Una terminal abierta antes de instalarlo no ve el comando <code>java</code> hasta reabrirla.</p>
 
 <h2 id="jmeter">2. JMeter</h2>
 
-<h3>macOS</h3>
-<pre><code>brew install jmeter
-jmeter --version</code></pre>
-<p>El comando <code>jmeter</code> abre la interfaz gráfica. La instalación vive en <code>$(brew --prefix jmeter)/libexec</code>.</p>
+<h3>macOS, con Homebrew</h3>
+<pre><code>brew install jmeter</code></pre>
+<pre><code>jmeter --version</code></pre>
+<p>Homebrew instala también Java 21 y el Plugins Manager. El comando <code>jmeter</code> abre la interfaz gráfica.</p>
 
 <h3>Windows</h3>
 <ol>
@@ -78,23 +89,39 @@ jmeter --version</code></pre>
   <li>Descomprimirlo en una ruta sin espacios, por ejemplo <code>C:\apache-jmeter-5.6.3</code>.</li>
   <li>Abrir la interfaz con <code>bin\jmeter.bat</code>.</li>
 </ol>
+<p>Con <a href="https://scoop.sh/">Scoop</a> o <a href="https://community.chocolatey.org/packages/jmeter">Chocolatey</a> también se instala la 5.6.3:</p>
+<pre><code>scoop bucket add extras
+scoop install extras/jmeter</code></pre>
+<pre><code>choco install jmeter</code></pre>
 
 <h3>Linux</h3>
-<ol>
-  <li>Descargar <code>apache-jmeter-5.6.3.tgz</code> de la misma página y descomprimirlo con <code>tar -xzf</code>.</li>
-  <li>Abrir la interfaz con <code>bin/jmeter</code>.</li>
-</ol>
+<pre><code>curl -LO https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+tar -xzf apache-jmeter-5.6.3.tgz -C ~</code></pre>
+<pre><code>~/apache-jmeter-5.6.3/bin/jmeter</code></pre>
 
-<div class="nota">La carpeta de JMeter, la que contiene <code>bin/</code> y <code>lib/</code>, es la que el resto de esta guía llama <em>la carpeta de JMeter</em>. En macOS con Homebrew es <code>$(brew --prefix jmeter)/libexec</code>.</div>
+<h3 id="carpetas">Dónde queda la carpeta de JMeter</h3>
+<p>La carpeta de JMeter es la que contiene <code>bin/</code> y <code>lib/</code>. Los plugins van en <code>lib/ext/</code>, dentro de ella. La ruta depende de cómo se instaló:</p>
+<table>
+  <tr><th>Instalación</th><th>Carpeta <code>lib/ext</code></th></tr>
+  <tr><td>Homebrew, Mac con Apple Silicon (M1 en adelante)</td><td><code>/opt/homebrew/opt/jmeter/libexec/lib/ext</code></td></tr>
+  <tr><td>Homebrew, Mac con Intel</td><td><code>/usr/local/opt/jmeter/libexec/lib/ext</code></td></tr>
+  <tr><td>Homebrew en Linux</td><td><code>/home/linuxbrew/.linuxbrew/opt/jmeter/libexec/lib/ext</code></td></tr>
+  <tr><td>ZIP de Apache en Windows</td><td><code>C:\apache-jmeter-5.6.3\lib\ext</code>, o donde se haya descomprimido</td></tr>
+  <tr><td>Scoop</td><td><code>%USERPROFILE%\scoop\apps\jmeter\current\lib\ext</code></td></tr>
+  <tr><td>Chocolatey</td><td><code>C:\ProgramData\chocolatey\lib\jmeter\tools\apache-jmeter-5.6.3\lib\ext</code></td></tr>
+  <tr><td>TGZ de Apache en macOS o Linux</td><td><code>~/apache-jmeter-5.6.3/lib/ext</code>, o donde se haya descomprimido</td></tr>
+</table>
+<p>Con Homebrew, este comando imprime la ruta en cualquier máquina:</p>
+<pre><code>echo "$(brew --prefix jmeter)/libexec/lib/ext"</code></pre>
 
 <h2 id="manager">3. Plugins Manager</h2>
-<p>Con JMeter abierto, el menú <strong>Options</strong> tiene una entrada <strong>Plugins Manager</strong> si el manager ya está instalado. La versión de Homebrew lo trae; la descarga de Apache no.</p>
-<p>Si la entrada no aparece:</p>
-<ol>
-  <li>Descargar <code>jmeter-plugins-manager.jar</code> desde <a href="https://jmeter-plugins.org/install/Install/">jmeter-plugins.org/install/Install</a>.</li>
-  <li>Copiarlo a <code>lib/ext/</code> dentro de la carpeta de JMeter.</li>
-  <li>Cerrar JMeter y abrirlo otra vez.</li>
-</ol>
+<p>Con JMeter abierto, el menú <strong>Options</strong> tiene una entrada <strong>Plugins Manager</strong> si el manager ya está instalado. Homebrew lo trae; el ZIP, el TGZ, Scoop y Chocolatey no.</p>
+<p>Si la entrada no aparece, se descarga el jar a la carpeta <code>lib/ext</code> de la tabla anterior, con JMeter cerrado. El enlace <code>jmeter-plugins.org/get/</code> siempre entrega la versión más reciente.</p>
+<h3>macOS o Linux, TGZ</h3>
+<pre><code>curl -L -o ~/apache-jmeter-5.6.3/lib/ext/jmeter-plugins-manager.jar https://jmeter-plugins.org/get/</code></pre>
+<h3>Windows, PowerShell</h3>
+<pre><code>Invoke-WebRequest -Uri https://jmeter-plugins.org/get/ -OutFile C:\apache-jmeter-5.6.3\lib\ext\jmeter-plugins-manager.jar</code></pre>
+<p>Si JMeter quedó en otra carpeta, se cambia la ruta del comando por la de la tabla. Al abrir JMeter otra vez, el menú <strong>Options</strong> ya muestra <strong>Plugins Manager</strong>.</p>
 
 <h2 id="plugins">4. Custom Thread Groups y 3 Basic Graphs</h2>
 <ol>
@@ -113,8 +140,29 @@ jmeter --version</code></pre>
 
 <h2 id="prueba">5. Comprobar con la plantilla</h2>
 <p>El repositorio trae <a href="https://github.com/danihrndzld/hdt6-jmeter-books/blob/main/plantilla.jmx"><code>plantilla.jmx</code></a>, un plan con un Concurrency Thread Group y un <code>GET /books</code>. Abrirla en JMeter, con <strong>File &gt; Open</strong>, es la prueba de que Custom Thread Groups quedó instalado: sin el plugin, JMeter no carga el plan y muestra un error que menciona <code>ConcurrencyThreadGroup</code>.</p>
-<p>Con el API corriendo (<code>uv run api.py</code> en la raíz del repositorio), el botón verde de JMeter corre la plantilla y el <em>Summary Report</em> se llena con solicitudes a <code>/books</code>, todas con 0 % de errores.</p>
+<p>Con el API corriendo (<code>uv run api.py</code> en la raíz del repositorio), el botón verde de JMeter corre la plantilla y el <em>Summary Report</em> se llena con solicitudes a <code>/books</code> y ninguna falla.</p>
 <div class="nota">La plantilla se guarda como <code>plan.jmx</code> y se completa con lo que pide la sección <em>2. El plan</em> del README. Las cantidades de usuarios, ramp-up y tiempo sostenido que trae están escritas a mano, y el README pide poder cambiarlas desde la línea de comandos.</div>
 </main>
+<script>
+document.querySelectorAll("pre").forEach(function (pre) {
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "copiar"; b.textContent = "Copiar";
+  b.setAttribute("aria-label", "Copiar comando");
+  b.addEventListener("click", function () {
+    var texto = pre.querySelector("code").innerText;
+    var listo = function () {
+      b.textContent = "Copiado"; b.classList.add("ok");
+      setTimeout(function () { b.textContent = "Copiar"; b.classList.remove("ok"); }, 1500);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(texto).then(listo);
+    } else {
+      var t = document.createElement("textarea"); t.value = texto; document.body.appendChild(t);
+      t.select(); document.execCommand("copy"); t.remove(); listo();
+    }
+  });
+  pre.appendChild(b);
+});
+</script>
 </body>
 </html>
