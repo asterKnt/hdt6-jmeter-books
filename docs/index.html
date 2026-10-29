@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HDT 6: instalar JMeter y sus plugins</title>
+<style>
+  :root {
+    --paper: #F7F6F1; --ink: #1F241E; --ink2: #545A4E; --line: #DFE1D7;
+    --accent: #2E5D4B; --accentd: #234838; --tint: #E7ECE4; --code: #EEF0E9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #171A16; --ink: #E6E8E1; --ink2: #A7AD9F; --line: #2F352D;
+      --accent: #6FA88F; --accentd: #8CC2A9; --tint: #1F2620; --code: #222820;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 17px/1.6 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-size: 1.35rem; margin: 40px 0 8px; padding-top: 12px; border-top: 2px solid var(--accent); }
+  h3 { font-size: 1.05rem; margin: 24px 0 4px; }
+  p.lead { color: var(--ink2); margin-top: 0; }
+  a { color: var(--accentd); }
+  code, pre { font-family: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; }
+  code { background: var(--code); padding: 1px 5px; border-radius: 3px; }
+  pre { background: var(--code); padding: 12px 14px; border-left: 3px solid var(--accent); overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--accent); color: var(--paper); font-weight: 600; }
+  .nota { background: var(--tint); border-left: 3px solid var(--accent); padding: 10px 14px; margin: 16px 0; }
+  ol li { margin: 4px 0; }
+  nav { font-size: 0.95rem; margin: 16px 0 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Instalar JMeter, el Plugins Manager y los plugins de la HDT 6</h1>
+<p class="lead">Guía de instalación para la Hoja de Trabajo 6 de Calidad y Automatización en Ingeniería de Software, UFM 2026. El enunciado está en el <a href="https://github.com/danihrndzld/hdt6-jmeter-books">README del repositorio</a>.</p>
+
+<nav>
+  <a href="#java">1. Java</a> &nbsp;|&nbsp;
+  <a href="#jmeter">2. JMeter</a> &nbsp;|&nbsp;
+  <a href="#manager">3. Plugins Manager</a> &nbsp;|&nbsp;
+  <a href="#plugins">4. Plugins</a> &nbsp;|&nbsp;
+  <a href="#prueba">5. Comprobar</a>
+</nav>
+
+<table>
+  <tr><th>Componente</th><th>Versión</th><th>Fuente</th></tr>
+  <tr><td>Java</td><td>8 o más reciente</td><td><a href="https://jmeter.apache.org/usermanual/get-started.html">requisitos de JMeter</a></td></tr>
+  <tr><td>Apache JMeter</td><td>5.6.3</td><td><a href="https://jmeter.apache.org/download_jmeter.cgi">jmeter.apache.org</a></td></tr>
+  <tr><td>Plugins Manager</td><td>la que traiga Homebrew, o la más reciente</td><td><a href="https://jmeter-plugins.org/install/Install/">jmeter-plugins.org</a></td></tr>
+  <tr><td>Custom Thread Groups</td><td>la más reciente</td><td>Plugins Manager</td></tr>
+  <tr><td>3 Basic Graphs</td><td>la más reciente</td><td>Plugins Manager</td></tr>
+</table>
+
+<h2 id="java">1. Java</h2>
+<p>JMeter corre sobre Java. Para saber si ya está instalado y qué versión es:</p>
+<pre><code>java -version</code></pre>
+<p>Si el comando no existe, en macOS lo instala Homebrew junto con JMeter en el paso 2. En Windows y Linux se instala un JDK, por ejemplo <a href="https://adoptium.net/">Eclipse Temurin</a> 21, y se abre una terminal nueva antes de seguir.</p>
+
+<h2 id="jmeter">2. JMeter</h2>
+
+<h3>macOS</h3>
+<pre><code>brew install jmeter
+jmeter --version</code></pre>
+<p>El comando <code>jmeter</code> abre la interfaz gráfica. La instalación vive en <code>$(brew --prefix jmeter)/libexec</code>.</p>
+
+<h3>Windows</h3>
+<ol>
+  <li>Descargar <code>apache-jmeter-5.6.3.zip</code> de la sección <em>Binaries</em> en <a href="https://jmeter.apache.org/download_jmeter.cgi">la página de descargas</a>.</li>
+  <li>Descomprimirlo en una ruta sin espacios, por ejemplo <code>C:\apache-jmeter-5.6.3</code>.</li>
+  <li>Abrir la interfaz con <code>bin\jmeter.bat</code>.</li>
+</ol>
+
+<h3>Linux</h3>
+<ol>
+  <li>Descargar <code>apache-jmeter-5.6.3.tgz</code> de la misma página y descomprimirlo con <code>tar -xzf</code>.</li>
+  <li>Abrir la interfaz con <code>bin/jmeter</code>.</li>
+</ol>
+
+<div class="nota">La carpeta de JMeter, la que contiene <code>bin/</code> y <code>lib/</code>, es la que el resto de esta guía llama <em>la carpeta de JMeter</em>. En macOS con Homebrew es <code>$(brew --prefix jmeter)/libexec</code>.</div>
+
+<h2 id="manager">3. Plugins Manager</h2>
+<p>Con JMeter abierto, el menú <strong>Options</strong> tiene una entrada <strong>Plugins Manager</strong> si el manager ya está instalado. La versión de Homebrew lo trae; la descarga de Apache no.</p>
+<p>Si la entrada no aparece:</p>
+<ol>
+  <li>Descargar <code>jmeter-plugins-manager.jar</code> desde <a href="https://jmeter-plugins.org/install/Install/">jmeter-plugins.org/install/Install</a>.</li>
+  <li>Copiarlo a <code>lib/ext/</code> dentro de la carpeta de JMeter.</li>
+  <li>Cerrar JMeter y abrirlo otra vez.</li>
+</ol>
+
+<h2 id="plugins">4. Custom Thread Groups y 3 Basic Graphs</h2>
+<ol>
+  <li>Abrir <strong>Options &gt; Plugins Manager</strong>.</li>
+  <li>En la pestaña <strong>Available Plugins</strong>, buscar <code>Custom Thread Groups</code> y marcar su casilla.</li>
+  <li>Buscar <code>3 Basic Graphs</code> y marcar su casilla.</li>
+  <li>Presionar <strong>Apply Changes and Restart JMeter</strong>. JMeter descarga los dos plugins y sus dependencias, y se reinicia solo.</li>
+  <li>Abrir el Plugins Manager otra vez. Los dos plugins aparecen en la pestaña <strong>Installed Plugins</strong>. Esa pestaña es la captura que va en <code>evidencia/plugins.png</code>.</li>
+</ol>
+
+<table>
+  <tr><th>Plugin</th><th>Qué agrega a JMeter</th><th>Dónde aparece</th></tr>
+  <tr><td>Custom Thread Groups</td><td>Concurrency Thread Group y otros grupos de usuarios</td><td>Add &gt; Threads (Users)</td></tr>
+  <tr><td>3 Basic Graphs</td><td>Active Threads Over Time, Response Times Over Time, Transactions per Second</td><td>Add &gt; Listener, con el prefijo <code>jp@gc</code></td></tr>
+</table>
+
+<h2 id="prueba">5. Comprobar con la plantilla</h2>
+<p>El repositorio trae <a href="https://github.com/danihrndzld/hdt6-jmeter-books/blob/main/plantilla.jmx"><code>plantilla.jmx</code></a>, un plan con un Concurrency Thread Group y un <code>GET /books</code>. Abrirla en JMeter, con <strong>File &gt; Open</strong>, es la prueba de que Custom Thread Groups quedó instalado: sin el plugin, JMeter no carga el plan y muestra un error que menciona <code>ConcurrencyThreadGroup</code>.</p>
+<p>Con el API corriendo (<code>uv run api.py</code> en la raíz del repositorio), el botón verde de JMeter corre la plantilla y el <em>Summary Report</em> se llena con solicitudes a <code>/books</code>, todas con 0 % de errores.</p>
+<div class="nota">La plantilla se guarda como <code>plan.jmx</code> y se completa con lo que pide la sección <em>2. El plan</em> del README. Las cantidades de usuarios, ramp-up y tiempo sostenido que trae están escritas a mano, y el README pide poder cambiarlas desde la línea de comandos.</div>
+</main>
+</body>
+</html>
