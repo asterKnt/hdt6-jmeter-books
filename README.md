@@ -12,6 +12,7 @@
 </p>
 
 <p>
+<a href="https://danihrndzld.github.io/hdt6-jmeter-books/">Guía de instalación</a> &nbsp;|&nbsp;
 <a href="#el-api">El API</a> &nbsp;|&nbsp;
 <a href="#qué-se-pide">Qué se pide</a> &nbsp;|&nbsp;
 <a href="#entrega">Entrega</a>
@@ -72,7 +73,7 @@ El API rechaza con 422 un libro con `year` fuera del rango de 1450 a 2100. La co
 
 ### 1. Plugins
 
-Se instala el Plugins Manager en JMeter y, desde él, estos dos plugins:
+Se instala el Plugins Manager en JMeter y, desde él, estos dos plugins. La [guía de instalación](https://danihrndzld.github.io/hdt6-jmeter-books/) cubre Java, JMeter, el Plugins Manager y los dos plugins en macOS, Windows y Linux.
 
 | Plugin | Se usa para |
 |---|---|
@@ -81,7 +82,7 @@ Se instala el Plugins Manager en JMeter y, desde él, estos dos plugins:
 
 ### 2. El plan
 
-El plan se guarda como `plan.jmx` en la raíz del repositorio. Cada usuario repite estos tres pasos mientras dura la prueba:
+El plan se guarda como `plan.jmx` en la raíz del repositorio y parte de [`plantilla.jmx`](plantilla.jmx), que trae el Concurrency Thread Group y un `GET /books`. Cada usuario repite estos tres pasos mientras dura la prueba:
 
 1. Pide `GET /books`.
 2. Crea un libro con `POST /books`, tomando los datos de una fila de `books.csv`.
